@@ -4,10 +4,14 @@
 --- package must get a new **major** version.
 ---
 
-local M = {}
+local M = {
+    opts = {
+        default_mappings = true,
+    },
+}
 
 function M.setup(opts)
-    M.opts = opts or {}
+    M.opts = vim.tbl_deep_extend("force", M.opts, opts or {})
 
     -- Load sidebar functionality
     require("harpoon_sidebar.sidebar")
