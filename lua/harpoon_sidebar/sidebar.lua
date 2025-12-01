@@ -1,11 +1,29 @@
--- lua/personal/harpoon_buffer.lua
+--- Harpoon sidebar buffer implementation.
+---
+--- Renders the current Harpoon list in a small buffer and keeps it in sync
+--- when items are added or removed.
+
 local M = {}
 
-local harpoon = require("harpoon")
-local buf
+local harpoon
+local list
+local orig_add
+local orig_remove_at
 
--- Find the window currently displaying the sidebar buffer
+local buf -- sidebar buffer handle
+
+-- Configuration local to this module.
+local config = {
+    max_height = 20,
+    min_height = 1,
+}
+
+-- Find the window currently displaying the sidebar buffer.
 local function find_sidebar_win()
+    if not buf or not vim.api.nvim_buf_is_valid(buf) then
+        return nil
+    end
+
     for _, w in ipairs(vim.api.nvim_list_wins()) do
         local b = vim.api.nvim_win_get_buf(w)
         if b == buf then
@@ -15,30 +33,92 @@ local function find_sidebar_win()
     return nil
 end
 
--- Resize the sidebar to match number of Harpoon items
+-- Resize the sidebar window to match number of Harpoon items.
 local function resize_sidebar()
     local win = find_sidebar_win()
     if not win then
         return
     end
 
-    local count = #harpoon:list().items
-    local height = math.max(1, math.min(count, 20))
+    if not list then
+        return
+    end
 
-    vim.api.nvim_win_set_height(win, height)
+    local count = #list.items
+    local height = math.max(config.min_height, math.min(config.max_height, count))
+
+    if height > 0 then
+        pcall(vim.api.nvim_win_set_height, win, height)
+    end
 end
 
--- Render the sidebar buffer
-local function render()
+-- Ensure we have harpoon and a list, and instrument the list so that
+-- updates trigger sidebar rerender/resize.
+local function ensure_list()
+    if list and harpoon then
+        return true
+    end
+
+    local ok, h = pcall(require, "harpoon")
+    if not ok then
+        vim.notify(
+            "[harpoon-sidebar] harpoon not found. Make sure ThePrimeagen/harpoon is installed and configured.",
+            vim.log.levels.WARN
+        )
+        return false
+    end
+
+    harpoon = h
+
+    -- harpoon:setup() must have been called by the user already.
+    list = harpoon:list()
+    if not list then
+        vim.notify("[harpoon-sidebar] harpoon:list() returned nil. Did you call harpoon:setup()?", vim.log.levels.WARN)
+        return false
+    end
+
+    -- Instrument the list to auto-refresh the sidebar when items change.
+    orig_add = list.add
+    orig_remove_at = list.remove_at
+
+    function list:add(...)
+        orig_add(self, ...)
+        if buf and vim.api.nvim_buf_is_valid(buf) then
+            M.render()
+            resize_sidebar()
+        end
+    end
+
+    function list:remove_at(...)
+        orig_remove_at(self, ...)
+        if buf and vim.api.nvim_buf_is_valid(buf) then
+            M.render()
+            resize_sidebar()
+        end
+    end
+
+    return true
+end
+
+-- Render the sidebar buffer.
+function M.render()
     if not buf or not vim.api.nvim_buf_is_valid(buf) then
         return
     end
 
-    local list = harpoon:list()
+    if not ensure_list() then
+        return
+    end
+
     local lines = {}
 
     for i, item in ipairs(list.items) do
-        local name = vim.fn.fnamemodify(item.value, ":t")
+        local name = item.value
+        if type(name) == "string" then
+            name = vim.fn.fnamemodify(name, ":t")
+        else
+            name = tostring(name)
+        end
         table.insert(lines, string.format("%d  %s", i, name))
     end
 
@@ -47,59 +127,52 @@ local function render()
     vim.bo[buf].modifiable = false
 end
 
-M.render = render
-
--- Open sidebar buffer (called by neotree_harpoon.lua)
-function M.open()
-    if not buf or not vim.api.nvim_buf_is_valid(buf) then
-        buf = vim.api.nvim_create_buf(false, false)
-        vim.bo[buf].buftype = "nofile"
-        vim.bo[buf].buflisted = false -- sidebar should not be treated as a file buffer
-        vim.bo[buf].bufhidden = "hide"
-        vim.bo[buf].swapfile = false
-        vim.bo[buf].filetype = "harpoonlist"
-        vim.bo[buf].modifiable = false
-        vim.bo[buf].readonly = true
-
-        -- Manual refresh under <leader>hr
-        vim.keymap.set("n", "<leader>hr", function()
-            render()
-        end, { buffer = buf, desc = "Refresh Harpoon sidebar", silent = true })
+-- Create the sidebar buffer if needed.
+local function ensure_buf()
+    if buf and vim.api.nvim_buf_is_valid(buf) then
+        return buf
     end
 
-    vim.api.nvim_win_set_buf(0, buf)
-    render()
+    buf = vim.api.nvim_create_buf(false, false)
+
+    vim.bo[buf].buftype = "nofile"
+    vim.bo[buf].buflisted = false
+    vim.bo[buf].bufhidden = "wipe"
+    vim.bo[buf].swapfile = false
+    vim.bo[buf].filetype = "harpoon-sidebar"
+    vim.bo[buf].modifiable = false
+    vim.bo[buf].readonly = true
+
+    -- Manual refresh under <leader>hr (buffer-local)
+    vim.keymap.set("n", "<leader>hr", function()
+        M.render()
+        resize_sidebar()
+    end, { buffer = buf, desc = "Refresh Harpoon sidebar", silent = true })
+
+    return buf
+end
+
+-- Open sidebar buffer in the current window.
+function M.open()
+    if not ensure_list() then
+        return
+    end
+
+    local b = ensure_buf()
+
+    vim.api.nvim_win_set_buf(0, b)
+    M.render()
     resize_sidebar()
 end
 
--- Ensure the sidebar updates when Harpoon list changes
-local list = harpoon:list()
-
-local orig_add = list.add
-local orig_remove_at = list.remove_at
-
-function list:add(...)
-    orig_add(self, ...)
-    if buf and vim.api.nvim_buf_is_valid(buf) then
-        render()
-        resize_sidebar()
-    end
-end
-
-function list:remove_at(...)
-    orig_remove_at(self, ...)
-    if buf and vim.api.nvim_buf_is_valid(buf) then
-        render()
-        resize_sidebar()
-    end
-end
-
--- Auto-refresh when entering the sidebar window
+-- Auto-refresh when entering the sidebar window.
 vim.api.nvim_create_autocmd("BufEnter", {
     callback = function(args)
         if buf and vim.api.nvim_buf_is_valid(buf) and args.buf == buf then
-            render()
-            resize_sidebar()
+            if ensure_list() then
+                M.render()
+                resize_sidebar()
+            end
         end
     end,
 })
