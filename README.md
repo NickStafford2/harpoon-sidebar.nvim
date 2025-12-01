@@ -71,17 +71,6 @@ You can disable these defaults if desired.
 
 The plugin never overwrites real buffers and never steals focus unintentionally.
 
-## 📁 File Structure
-
-```
-harpoon-sidebar.nvim/
-├── lua/
-│   └── harpoon_sidebar/
-│       ├── init.lua
-│       ├── sidebar.lua
-│       └── neotree.lua
-└── plugin/
-    └── harpoon_sidebar.lua   ← default keymaps live here
 ```
 
 ## 🧪 Development
