@@ -1,4 +1,4 @@
---- Register `plugin_template` to telescope.nvim.
+--- Register `harpoon_sidebar` to telescope.nvim.
 ---
 ---@source https://github.com/nvim-telescope/telescope.nvim
 ---
@@ -13,10 +13,10 @@ local pickers = require("telescope.pickers")
 local telescope_actions = require("telescope.actions")
 local telescope_config = require("telescope.config").values
 
-local configuration = require("plugin_template._core.configuration")
-local read = require("plugin_template._commands.goodnight_moon.read")
-local say_runner = require("plugin_template._commands.hello_world.say.runner")
-local tabler = require("plugin_template._core.tabler")
+local configuration = require("harpoon_sidebar._core.configuration")
+local read = require("harpoon_sidebar._commands.goodnight_moon.read")
+local say_runner = require("harpoon_sidebar._commands.hello_world.say.runner")
+local tabler = require("harpoon_sidebar._core.tabler")
 
 ---@diagnostic disable-next-line: deprecated
 local unpack = unpack or table.unpack
@@ -26,7 +26,7 @@ vim.api.nvim_set_hl(0, "PluginTemplateTelescopeSecondary", { link = "TelescopeRe
 
 ---@alias telescope.CommandOptions table<any, any>
 
---- Run the `:Telescope plugin_template goodnight-moon` command.
+--- Run the `:Telescope harpoon_sidebar goodnight-moon` command.
 ---
 ---@param options telescope.CommandOptions The Telescope UI / layout options.
 ---
@@ -84,7 +84,7 @@ function M.get_goodnight_moon_picker(options)
     return picker
 end
 
---- Run the `:Telescope plugin_template hello-world` command.
+--- Run the `:Telescope harpoon_sidebar hello-world` command.
 ---
 ---@param options telescope.CommandOptions The Telescope UI / layout options.
 ---

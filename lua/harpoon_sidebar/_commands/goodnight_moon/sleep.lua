@@ -2,7 +2,7 @@
 
 local logging = require("mega.logging")
 
-local _LOGGER = logging.get_logger("plugin_template._commands.goodnight_moon.sleep")
+local _LOGGER = logging.get_logger("harpoon_sidebar._commands.goodnight_moon.sleep")
 
 local M = {}
 

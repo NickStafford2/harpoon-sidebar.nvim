@@ -4,13 +4,13 @@
 --- package must get a new **major** version.
 ---
 
-local configuration = require("plugin_template._core.configuration")
-local arbitrary_thing_runner = require("plugin_template._commands.arbitrary_thing.runner")
-local copy_logs_runner = require("plugin_template._commands.copy_logs.runner")
-local count_sheep = require("plugin_template._commands.goodnight_moon.count_sheep")
-local read = require("plugin_template._commands.goodnight_moon.read")
-local say_runner = require("plugin_template._commands.hello_world.say.runner")
-local sleep = require("plugin_template._commands.goodnight_moon.sleep")
+local configuration = require("harpoon_sidebar._core.configuration")
+local arbitrary_thing_runner = require("harpoon_sidebar._commands.arbitrary_thing.runner")
+local copy_logs_runner = require("harpoon_sidebar._commands.copy_logs.runner")
+local count_sheep = require("harpoon_sidebar._commands.goodnight_moon.count_sheep")
+local read = require("harpoon_sidebar._commands.goodnight_moon.read")
+local say_runner = require("harpoon_sidebar._commands.hello_world.say.runner")
+local sleep = require("harpoon_sidebar._commands.goodnight_moon.sleep")
 
 local M = {}
 

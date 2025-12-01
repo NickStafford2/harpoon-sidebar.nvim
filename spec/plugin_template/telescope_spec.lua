@@ -1,8 +1,8 @@
 --- Make sure the Telescope integration works as expected.
 
 local mock_test = require("test_utilities.mock_test")
-local plugin_template = require("telescope._extensions.plugin_template")
-local runner = require("telescope._extensions.plugin_template.runner")
+local harpoon_sidebar = require("telescope._extensions.harpoon_sidebar")
+local runner = require("telescope._extensions.harpoon_sidebar.runner")
 local telescope_actions = require("telescope.actions")
 local telescope_actions_state = require("telescope.actions.state")
 
@@ -76,10 +76,10 @@ end
 ---
 ---@param command string
 ---    A Telescope sub-command. e.g. If the command was `:Telescope
----    plugin_template foo` then this function would require `"foo"`.
+---    harpoon_sidebar foo` then this function would require `"foo"`.
 ---
 local function _make_telescope_picker(command)
-    plugin_template.exports[command]()
+    harpoon_sidebar.exports[command]()
 
     _wait_for_picker_to_initialize()
 

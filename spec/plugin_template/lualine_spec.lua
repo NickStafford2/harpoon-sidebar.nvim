@@ -2,13 +2,13 @@
 
 local highlight = require("lualine.highlight")
 local loader = require("lualine.utils.loader")
-local lualine_plugin_template = require("lualine.components.plugin_template")
+local lualine_harpoon_sidebar = require("lualine.components.harpoon_sidebar")
 local mock_test = require("test_utilities.mock_test")
-local plugin_template = require("plugin_template")
+local harpoon_sidebar = require("harpoon_sidebar")
 
 ---@return table # The generated Lualine component.
 local function _make_component()
-    return lualine_plugin_template({ self = { section = "y" } })
+    return lualine_harpoon_sidebar({ self = { section = "y" } })
 end
 
 --- Delete all existing highlight groups and recreate them (so we can keep tests clean).
@@ -19,7 +19,7 @@ end
 
 --- Enable lualine so we can create lualine component(s) and other various tasks.
 local function _setup_lualine()
-    lualine_plugin_template.PREVIOUS_COMMAND = nil
+    lualine_harpoon_sidebar.PREVIOUS_COMMAND = nil
 
     mock_test.silence_all_internal_prints()
 
@@ -45,9 +45,9 @@ describe("API calls", function()
 
         assert.is_nil(component:update_status())
 
-        plugin_template.run_arbitrary_thing()
+        harpoon_sidebar.run_arbitrary_thing()
 
-        assert.equal("%#lualine_y_plugin_template_arbitrary_thing# Arbitrary Thing", component:update_status())
+        assert.equal("%#lualine_y_harpoon_sidebar_arbitrary_thing# Arbitrary Thing", component:update_status())
     end)
 
     it("works with #copy-logs", function()
@@ -55,9 +55,9 @@ describe("API calls", function()
 
         assert.is_nil(component:update_status())
 
-        plugin_template.run_copy_logs()
+        harpoon_sidebar.run_copy_logs()
 
-        assert.equal("%#lualine_y_plugin_template_copy_logs#󰈔 Copy Logs", component:update_status())
+        assert.equal("%#lualine_y_harpoon_sidebar_copy_logs#󰈔 Copy Logs", component:update_status())
     end)
 
     it("works with #goodnight-moon #count-sheep", function()
@@ -65,9 +65,9 @@ describe("API calls", function()
 
         assert.is_nil(component:update_status())
 
-        plugin_template.run_goodnight_moon_count_sheep(10)
+        harpoon_sidebar.run_goodnight_moon_count_sheep(10)
 
-        assert.equal("%#lualine_y_plugin_template_goodnight_moon#⏾ Goodnight moon", component:update_status())
+        assert.equal("%#lualine_y_harpoon_sidebar_goodnight_moon#⏾ Goodnight moon", component:update_status())
     end)
 
     it("works with #goodnight-moon #read", function()
@@ -75,9 +75,9 @@ describe("API calls", function()
 
         assert.is_nil(component:update_status())
 
-        plugin_template.run_goodnight_moon_read("a book")
+        harpoon_sidebar.run_goodnight_moon_read("a book")
 
-        assert.equal("%#lualine_y_plugin_template_goodnight_moon#⏾ Goodnight moon", component:update_status())
+        assert.equal("%#lualine_y_harpoon_sidebar_goodnight_moon#⏾ Goodnight moon", component:update_status())
     end)
 
     it("works with #goodnight-moon #sleep", function()
@@ -85,9 +85,9 @@ describe("API calls", function()
 
         assert.is_nil(component:update_status())
 
-        plugin_template.run_goodnight_moon_sleep()
+        harpoon_sidebar.run_goodnight_moon_sleep()
 
-        assert.equal("%#lualine_y_plugin_template_goodnight_moon#⏾ Goodnight moon", component:update_status())
+        assert.equal("%#lualine_y_harpoon_sidebar_goodnight_moon#⏾ Goodnight moon", component:update_status())
     end)
 
     it("works with #hello-world #say phrase", function()
@@ -95,9 +95,9 @@ describe("API calls", function()
 
         assert.is_nil(component:update_status())
 
-        plugin_template.run_hello_world_say_phrase({ "A phrase!" })
+        harpoon_sidebar.run_hello_world_say_phrase({ "A phrase!" })
 
-        assert.equal("%#lualine_y_plugin_template_hello_world# Hello, World!", component:update_status())
+        assert.equal("%#lualine_y_harpoon_sidebar_hello_world# Hello, World!", component:update_status())
     end)
 
     it("works with #hello-world #say word", function()
@@ -105,9 +105,9 @@ describe("API calls", function()
 
         assert.is_nil(component:update_status())
 
-        plugin_template.run_hello_world_say_word("some_text_here")
+        harpoon_sidebar.run_hello_world_say_word("some_text_here")
 
-        assert.equal("%#lualine_y_plugin_template_hello_world# Hello, World!", component:update_status())
+        assert.equal("%#lualine_y_harpoon_sidebar_hello_world# Hello, World!", component:update_status())
     end)
 end)
 
@@ -121,7 +121,7 @@ describe("Command calls", function()
 
         vim.cmd([[PluginTemplate arbitrary-thing]])
 
-        assert.equal("%#lualine_y_plugin_template_arbitrary_thing# Arbitrary Thing", component:update_status())
+        assert.equal("%#lualine_y_harpoon_sidebar_arbitrary_thing# Arbitrary Thing", component:update_status())
     end)
 
     it("works with #copy-logs", function()
@@ -131,7 +131,7 @@ describe("Command calls", function()
 
         vim.cmd([[PluginTemplate copy-logs]])
 
-        assert.equal("%#lualine_y_plugin_template_copy_logs#󰈔 Copy Logs", component:update_status())
+        assert.equal("%#lualine_y_harpoon_sidebar_copy_logs#󰈔 Copy Logs", component:update_status())
     end)
 
     it("works with #goodnight-moon #count-sheep", function()
@@ -141,7 +141,7 @@ describe("Command calls", function()
 
         vim.cmd([[PluginTemplate goodnight-moon count-sheep 10]])
 
-        assert.equal("%#lualine_y_plugin_template_goodnight_moon#⏾ Goodnight moon", component:update_status())
+        assert.equal("%#lualine_y_harpoon_sidebar_goodnight_moon#⏾ Goodnight moon", component:update_status())
     end)
 
     it("works with #goodnight-moon #read", function()
@@ -151,7 +151,7 @@ describe("Command calls", function()
 
         vim.cmd([[PluginTemplate goodnight-moon read "a book"]])
 
-        assert.equal("%#lualine_y_plugin_template_goodnight_moon#⏾ Goodnight moon", component:update_status())
+        assert.equal("%#lualine_y_harpoon_sidebar_goodnight_moon#⏾ Goodnight moon", component:update_status())
     end)
 
     it("works with #goodnight-moon #sleep", function()
@@ -161,7 +161,7 @@ describe("Command calls", function()
 
         vim.cmd([[PluginTemplate goodnight-moon sleep -zzz]])
 
-        assert.equal("%#lualine_y_plugin_template_goodnight_moon#⏾ Goodnight moon", component:update_status())
+        assert.equal("%#lualine_y_harpoon_sidebar_goodnight_moon#⏾ Goodnight moon", component:update_status())
     end)
 
     it("works with #hello-world #say phrase", function()
@@ -171,7 +171,7 @@ describe("Command calls", function()
 
         vim.cmd([[PluginTemplate hello-world say phrase "something more text"]])
 
-        assert.equal("%#lualine_y_plugin_template_hello_world# Hello, World!", component:update_status())
+        assert.equal("%#lualine_y_harpoon_sidebar_hello_world# Hello, World!", component:update_status())
     end)
 
     it("works with #hello-world #say word", function()
@@ -181,6 +181,6 @@ describe("Command calls", function()
 
         vim.cmd([[PluginTemplate hello-world say word some_text_here]])
 
-        assert.equal("%#lualine_y_plugin_template_hello_world# Hello, World!", component:update_status())
+        assert.equal("%#lualine_y_harpoon_sidebar_hello_world# Hello, World!", component:update_status())
     end)
 end)

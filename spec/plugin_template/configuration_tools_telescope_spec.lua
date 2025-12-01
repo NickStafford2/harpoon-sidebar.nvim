@@ -1,11 +1,11 @@
 --- Make sure configuration health checks for lua succeed or fail where they should.
 
-local configuration_ = require("plugin_template._core.configuration")
-local health = require("plugin_template.health")
+local configuration_ = require("harpoon_sidebar._core.configuration")
+local health = require("harpoon_sidebar.health")
 
 --- Make sure `data`, whether undefined, defined, or partially defined, is broken.
 ---
----@param data plugin_template.Configuration? The user customizations, if any.
+---@param data harpoon_sidebar.Configuration? The user customizations, if any.
 ---@param messages string[] All found, expected error messages.
 ---
 local function _assert_bad(data, messages)
@@ -23,7 +23,7 @@ end
 
 --- Make sure `data`, whether undefined, defined, or partially defined, works.
 ---
----@param data plugin_template.Configuration? The user customizations, if any.
+---@param data harpoon_sidebar.Configuration? The user customizations, if any.
 ---
 local function _assert_good(data)
     data = configuration_.resolve_data(data)

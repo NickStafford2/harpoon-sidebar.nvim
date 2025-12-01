@@ -16,7 +16,7 @@ function M.make_parser()
 
     parser:set_execute(function(data)
         ---@cast data mega.cmdparse.NamespaceExecuteArguments
-        local runner = require("plugin_template._commands.copy_logs.runner")
+        local runner = require("harpoon_sidebar._commands.copy_logs.runner")
 
         runner.run(data.namespace.log)
     end)

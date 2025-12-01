@@ -1,4 +1,4 @@
---- Register `plugin_template` to telescope.nvim.
+--- Register `harpoon_sidebar` to telescope.nvim.
 ---
 ---@source https://github.com/nvim-telescope/telescope.nvim
 ---
@@ -9,13 +9,13 @@ if not has_telescope then
     error("Telescope interface requires telescope.nvim (https://github.com/nvim-telescope/telescope.nvim)")
 end
 
-local configuration = require("plugin_template._core.configuration")
-local runner = require("telescope._extensions.plugin_template.runner")
+local configuration = require("harpoon_sidebar._core.configuration")
+local runner = require("telescope._extensions.harpoon_sidebar.runner")
 
 -- NOTE: This file is defer-loaded so it's okay to run this in the global scope
 configuration.initialize_data_if_needed()
 
---- Run the `:Telescope plugin_template goodnight-moon` command.
+--- Run the `:Telescope harpoon_sidebar goodnight-moon` command.
 ---
 ---@param options telescope.CommandOptions The Telescope UI / layout options.
 ---
@@ -25,7 +25,7 @@ local function _run_goodnight_moon(options)
     picker:find()
 end
 
---- Run the `:Telescope plugin_template hello-world` command.
+--- Run the `:Telescope harpoon_sidebar hello-world` command.
 ---
 ---@param options telescope.CommandOptions The Telescope UI / layout options.
 ---

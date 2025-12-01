@@ -3,30 +3,30 @@
 ---@source https://github.com/nvim-lualine/lualine.nvim
 ---
 
-local arbitrary_thing_runner = require("plugin_template._commands.arbitrary_thing.runner")
-local configuration = require("plugin_template._core.configuration")
-local copy_log_runner = require("plugin_template._commands.copy_logs.runner")
-local count_sheep = require("plugin_template._commands.goodnight_moon.count_sheep")
+local arbitrary_thing_runner = require("harpoon_sidebar._commands.arbitrary_thing.runner")
+local configuration = require("harpoon_sidebar._core.configuration")
+local copy_log_runner = require("harpoon_sidebar._commands.copy_logs.runner")
+local count_sheep = require("harpoon_sidebar._commands.goodnight_moon.count_sheep")
 local lualine_require = require("lualine_require")
 local modules = lualine_require.lazy_require({ highlight = "lualine.highlight" })
-local read = require("plugin_template._commands.goodnight_moon.read")
-local say_runner = require("plugin_template._commands.hello_world.say.runner")
-local sleep = require("plugin_template._commands.goodnight_moon.sleep")
-local tabler = require("plugin_template._core.tabler")
+local read = require("harpoon_sidebar._commands.goodnight_moon.read")
+local say_runner = require("harpoon_sidebar._commands.hello_world.say.runner")
+local sleep = require("harpoon_sidebar._commands.goodnight_moon.sleep")
+local tabler = require("harpoon_sidebar._core.tabler")
 
 local M = require("lualine.component"):extend()
 
 ---@type string?
 M.PREVIOUS_COMMAND = nil
 
----@class plugin_template.LualineConfiguration
+---@class harpoon_sidebar.LualineConfiguration
 ---    The Raw user settings from lualine's configuration.
----    e.g. `require("lualine").setup { sections = { { "plugin_template", ... }}}`
+---    e.g. `require("lualine").setup { sections = { { "harpoon_sidebar", ... }}}`
 ---    where "..." is the user's settings.
----@field display table<string, plugin_template.LualineDisplayData>?
+---@field display table<string, harpoon_sidebar.LualineDisplayData>?
 
----@class plugin_template.LualineDisplayData
----    Any text, icons, etc that will be displayed for `plugin_template` commands.
+---@class harpoon_sidebar.LualineDisplayData
+---    Any text, icons, etc that will be displayed for `harpoon_sidebar` commands.
 ---@field prefix string
 ---    The text to display when a command was called. e.g. " Goodnight moon".
 
@@ -61,13 +61,13 @@ _patch_runner_commands(sleep, { "run" }, "goodnight_moon")
 
 --- Setup all colors / text for lualine to display later.
 ---
----@param options plugin_template.LualineConfiguration?
+---@param options harpoon_sidebar.LualineConfiguration?
 ---    The options to pass from lualine to `plugin_templaet`.
 ---
 function M:init(options)
     configuration.initialize_data_if_needed()
 
-    --- @type table<string, plugin_template.LualineDisplayData>
+    --- @type table<string, harpoon_sidebar.LualineDisplayData>
     local data
 
     if options then
@@ -91,22 +91,22 @@ function M:init(options)
     self._highlight_groups = {
         arbitrary_thing = modules.highlight.create_component_highlight_group(
             defaults.arbitrary_thing.color or "Visual",
-            "plugin_template_arbitrary_thing",
+            "harpoon_sidebar_arbitrary_thing",
             self.options
         ),
         copy_logs = modules.highlight.create_component_highlight_group(
             defaults.copy_logs.color or "Comment",
-            "plugin_template_copy_logs",
+            "harpoon_sidebar_copy_logs",
             self.options
         ),
         goodnight_moon = modules.highlight.create_component_highlight_group(
             defaults.goodnight_moon.color or "Question",
-            "plugin_template_goodnight_moon",
+            "harpoon_sidebar_goodnight_moon",
             self.options
         ),
         hello_world = modules.highlight.create_component_highlight_group(
             defaults.hello_world.color or "Title",
-            "plugin_template_hello_world",
+            "harpoon_sidebar_hello_world",
             self.options
         ),
     }

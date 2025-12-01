@@ -1,4 +1,4 @@
---- The file that auto-creates documentation for `plugin_template`.
+--- The file that auto-creates documentation for `harpoon_sidebar`.
 
 local vimdoc = require("mega.vimdoc")
 
@@ -16,12 +16,12 @@ local function main()
 
     vimdoc.make_documentation_files({
         {
-            source = vim.fs.joinpath(root, "lua", "plugin_template", "init.lua"),
-            destination = vim.fs.joinpath(root, "doc", "plugin_template_api.txt"),
+            source = vim.fs.joinpath(root, "lua", "harpoon_sidebar", "init.lua"),
+            destination = vim.fs.joinpath(root, "doc", "harpoon_sidebar_api.txt"),
         },
         {
-            source = vim.fs.joinpath(root, "lua", "plugin_template", "types.lua"),
-            destination = vim.fs.joinpath(root, "doc", "plugin_template_types.txt"),
+            source = vim.fs.joinpath(root, "lua", "harpoon_sidebar", "types.lua"),
+            destination = vim.fs.joinpath(root, "doc", "harpoon_sidebar_types.txt"),
         },
     }, { enable_module_in_signature = false })
 end

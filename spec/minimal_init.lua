@@ -33,8 +33,8 @@ end
 
 vim.opt.rtp:append(".")
 
-vim.cmd("runtime plugin/plugin_template.lua")
+vim.cmd("runtime plugin/harpoon_sidebar.lua")
 
 require("lualine").setup()
 
-require("plugin_template._core.configuration").initialize_data_if_needed()
+require("harpoon_sidebar._core.configuration").initialize_data_if_needed()

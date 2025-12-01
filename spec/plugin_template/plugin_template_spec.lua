@@ -4,12 +4,12 @@
 --- likely want to delete or heavily modify this file. But it does give a quick
 --- look how to mock a test and some things you can do with Neovim/busted.
 
-local configuration = require("plugin_template._core.configuration")
-local copy_logs_runner = require("plugin_template._commands.copy_logs.runner")
+local configuration = require("harpoon_sidebar._core.configuration")
+local copy_logs_runner = require("harpoon_sidebar._commands.copy_logs.runner")
 local logging = require("mega.logging")
-local plugin_template = require("plugin_template")
+local harpoon_sidebar = require("harpoon_sidebar")
 
----@class plugin_template.Configuration
+---@class harpoon_sidebar.Configuration
 local _CONFIGURATION_DATA
 
 ---@type string[]
@@ -46,7 +46,7 @@ local function _make_fake_log(path)
     configuration.DATA.logging.output_path = path
     local logging_configuration = configuration.DATA.logging or {}
     ---@cast logging_configuration mega.logging.SparseLoggerOptions
-    logging.set_configuration("plugin_template", logging_configuration)
+    logging.set_configuration("harpoon_sidebar", logging_configuration)
 
     local file = io.open(path, "w") -- Open the file in write mode
 
@@ -93,13 +93,13 @@ describe("arbitrary-thing API", function()
     after_each(_reset_prints)
 
     it("runs #arbitrary-thing with #default arguments", function()
-        plugin_template.run_arbitrary_thing({})
+        harpoon_sidebar.run_arbitrary_thing({})
 
         assert.same({ "<No text given>" }, _DATA)
     end)
 
     it("runs #arbitrary-thing with arguments", function()
-        plugin_template.run_arbitrary_thing({ "v", "t" })
+        harpoon_sidebar.run_arbitrary_thing({ "v", "t" })
 
         assert.same({ "v, t" }, _DATA)
     end)
@@ -129,7 +129,7 @@ describe("copy logs API", function()
         local path = vim.fn.tempname() .. "copy_logs_test.log"
         _make_fake_log(path)
 
-        plugin_template.run_copy_logs(path)
+        harpoon_sidebar.run_copy_logs(path)
         _wait_for_result()
 
         assert.same({ path }, _DATA)
@@ -139,7 +139,7 @@ describe("copy logs API", function()
         local expected = vim.fn.tempname() .. "_copy_logs_default_test.log"
         _make_fake_log(expected)
 
-        plugin_template.run_copy_logs()
+        harpoon_sidebar.run_copy_logs()
         _wait_for_result()
 
         assert.same({ expected }, _DATA)
@@ -177,31 +177,31 @@ describe("hello world API - say phrase/word", function()
     after_each(_reset_prints)
 
     it("runs #hello-world with default `say phrase` arguments - 001", function()
-        plugin_template.run_hello_world_say_phrase({ "" })
+        harpoon_sidebar.run_hello_world_say_phrase({ "" })
 
         assert.same({ "No phrase was given" }, _DATA)
     end)
 
     it("runs #hello-world with default `say phrase` arguments - 002", function()
-        plugin_template.run_hello_world_say_phrase({})
+        harpoon_sidebar.run_hello_world_say_phrase({})
 
         assert.same({ "No phrase was given" }, _DATA)
     end)
 
     it("runs #hello-world with default `say word` arguments - 001", function()
-        plugin_template.run_hello_world_say_word("")
+        harpoon_sidebar.run_hello_world_say_word("")
 
         assert.same({ "No word was given" }, _DATA)
     end)
 
     it("runs #hello-world say phrase - with all of its arguments", function()
-        plugin_template.run_hello_world_say_phrase({ "Hello,", "World!" }, 2, "lowercase")
+        harpoon_sidebar.run_hello_world_say_phrase({ "Hello,", "World!" }, 2, "lowercase")
 
         assert.same({ "Saying phrase", "hello, world!", "hello, world!" }, _DATA)
     end)
 
     it("runs #hello-world say word - with all of its arguments", function()
-        plugin_template.run_hello_world_say_phrase({ "Hi" }, 2, "uppercase")
+        harpoon_sidebar.run_hello_world_say_phrase({ "Hi" }, 2, "uppercase")
 
         assert.same({ "Saying phrase", "HI", "HI" }, _DATA)
     end)
@@ -235,19 +235,19 @@ describe("goodnight-moon API", function()
     after_each(_reset_prints)
 
     it("runs #goodnight-moon #count-sheep with all of its arguments", function()
-        plugin_template.run_goodnight_moon_count_sheep(3)
+        harpoon_sidebar.run_goodnight_moon_count_sheep(3)
 
         assert.same({ "1 Sheep", "2 Sheep", "3 Sheep" }, _DATA)
     end)
 
     it("runs #goodnight-moon #read with all of its arguments", function()
-        plugin_template.run_goodnight_moon_read("a good book")
+        harpoon_sidebar.run_goodnight_moon_read("a good book")
 
         assert.same({ "a good book: it is a book" }, _DATA)
     end)
 
     it("runs #goodnight-moon #sleep with all of its arguments", function()
-        plugin_template.run_goodnight_moon_sleep(3)
+        harpoon_sidebar.run_goodnight_moon_sleep(3)
 
         assert.same({ "Zzz", "Zzz", "Zzz" }, _DATA)
     end)

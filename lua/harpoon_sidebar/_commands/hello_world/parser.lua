@@ -1,7 +1,7 @@
 --- The main parser for the `:PluginTemplate hello-world` command.
 
 local cmdparse = require("mega.cmdparse")
-local constant = require("plugin_template._commands.hello_world.say.constant")
+local constant = require("harpoon_sidebar._commands.hello_world.say.constant")
 
 local M = {}
 
@@ -82,7 +82,7 @@ function M.make_parser()
 
     phrase:set_execute(function(data)
         ---@cast data mega.cmdparse.NamespaceExecuteArguments
-        local runner = require("plugin_template._commands.hello_world.say.runner")
+        local runner = require("harpoon_sidebar._commands.hello_world.say.runner")
 
         local phrases = data.namespace.phrases
 
@@ -95,7 +95,7 @@ function M.make_parser()
 
     word:set_execute(function(data)
         ---@cast data mega.cmdparse.NamespaceExecuteArguments
-        local runner = require("plugin_template._commands.hello_world.say.runner")
+        local runner = require("harpoon_sidebar._commands.hello_world.say.runner")
 
         runner.run_say_word(data.namespace.word or "", data.namespace["repeat"], data.namespace.style)
     end)
